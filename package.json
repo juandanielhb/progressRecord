@@ -1,0 +1,19 @@
+{
+  "name": "progressrecordapp",
+  "version": "1.0.0",
+  "description": "Webapp to register the progress in the improvement of a person skills",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/juandanielhb/progressRecord.git"
+  },
+  "author": "juandanielhb",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/juandanielhb/progressRecord/issues"
+  },
+  "homepage": "https://github.com/juandanielhb/progressRecord#readme"
+}
