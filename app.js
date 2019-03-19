@@ -6,7 +6,7 @@ let bodyParser = require('body-parser');
 let app = express();
 
 // Cargar rutas
-let personRoutes = require('./routes/person.routes');
+let technologyRoutes = require('./routes/technology.routes');
 
 
 // Middlewares
@@ -24,7 +24,7 @@ app.use((req, res, next) => {
 });
 
 // Asignar rutas al api
-app.use('/api', personRoutes);
+app.use('/api', technologyRoutes);
 
 
 // Export
