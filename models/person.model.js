@@ -8,8 +8,20 @@ var personSchema = schema({
     surname:String,
     address:String,
     telephone:String,
-    email:{type:String,unique:true},
-    progress: {type: [schema.ObjectId], ref: 'Progress'},
+    email:String,
+    skills: [
+        {
+           technology:{
+               type:schema.ObjectId, 
+               ref: 'Technology'
+            },
+            percentage:Number
+        }
+    ]
+
 });
+
+     
+
 
 module.exports = mongoose.model('Person', personSchema);

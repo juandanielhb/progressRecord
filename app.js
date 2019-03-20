@@ -7,7 +7,7 @@ let app = express();
 
 // Cargar rutas
 let technologyRoutes = require('./routes/technology.routes');
-
+let personRoutes = require('./routes/person.routes');
 
 // Middlewares
 app.use(bodyParser.urlencoded({extended:false}));
@@ -25,7 +25,7 @@ app.use((req, res, next) => {
 
 // Asignar rutas al api
 app.use('/api', technologyRoutes);
-
+app.use('/api', personRoutes);
 
 // Export
 module.exports = app;
