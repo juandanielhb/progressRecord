@@ -1,6 +1,7 @@
 <!-- Modal -->
 <div class="modal fade" id="addTechnology" tabindex="-1" role="dialog" aria-labelledby="addTechnologyModal"
-    aria-hidden="true">
+    aria-hidden="true" (click)="status=null">
+
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -9,60 +10,82 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form>
-                <div class="modal-body">
 
+            <form #technologyForm="ngForm" (ngSubmit)="onSave(technologyForm)" class="col-lg-12">
+                <div *ngIf="status == 'success'" class="alert alert-success mb-0 mt-2" role="alert">
+                    Se guardo correctamente la nueva tecnologìa
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div *ngIf="status == 'error'" class="alert alert-danger mb-0 mt-2" role="alert">
+                    No se pudo guardar la nueva tecnologìa. Es posible que ya exista.
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+
+
+                <div class="modal-body">
                     <div class="form-group row">
                         <label for="inputName" class="col-sm-4 col-form-label">Nombre</label>
+
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="inputName">
+                            <input type="text" class="form-control" id="inputName" name="name" #name="ngModel"
+                                [(ngModel)]="technology.name">
                         </div>
                     </div>
+
                     <fieldset class="form-group mb-0">
                         <div class="row">
                             <legend class="col-sm-4 col-form-label pt-0">Categoría</legend>
                             <div class="col-sm-8">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1"
-                                        value="option1" checked>
-                                    <label class="form-check-label" for="gridRadios1">
-                                        Frontend
+                                <div *ngFor="let item of categories,let i = index" class="form-check">
+                                    <input class="form-check-input" type="radio" name="category" id="{{item+i}}"
+                                        value="{{item}}" #category="ngModel" [(ngModel)]="technology.category"
+                                        (change)="otherOption = false">
+                                    <label class="form-check-label" for="{{item+i}}">
+                                        {{item}}
                                     </label>
                                 </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2"
-                                        value="option2">
-                                    <label class="form-check-label" for="gridRadios2">
-                                        Backend
-                                    </label>
-                                </div>
-                                <div class="form-check disabled">
-                                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3"
-                                        value="option3">
+
+                                <div *ngIf="categories.length != 0" class="form-check disabled">
+                                    <input class="form-check-input" type="radio" name="category" id="gridRadios3"
+                                        value="option3" checked
+                                        (change)="otherOption = true; technology.category = null ">
+
                                     <label class="form-check-label" for="gridRadios3">
                                         Otra
                                     </label>
                                 </div>
-                                <div class="form-group row mt-1 mb-0">
-                    
-                                        <div class="col-sm-12 ">
-                                            <input type="text" class="form-control" id="inputName">
-                                        </div>
+
+                                <div *ngIf="otherOption" class="form-group row mt-1 mb-0">
+                                    <div class="col-sm-12 ">
+                                        <input type="text" class="form-control" id="inputName" name="category"
+                                            #category="ngModel" [(ngModel)]="technology.category">
+                                    </div>
                                 </div>
+
                             </div>
                         </div>
                     </fieldset>
 
                 </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary">Guardar</button>
+                    <input type="submit" value="Guardar" class="btn btn-primary">
+
                 </div>
+
             </form>
         </div>
 
     </div>
 </div>
+<!-- /Modal -->
 
 
 <div class="container mt-4">
@@ -86,22 +109,19 @@
                                 <div class="col-3">
                                     <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
                                         aria-orientation="vertical">
-                                        <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill"
-                                            href="#v-pills-home" role="tab" aria-controls="v-pills-home"
-                                            aria-selected="true">Frontend</a>
-                                        <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill"
-                                            href="#v-pills-profile" role="tab" aria-controls="v-pills-profile"
-                                            aria-selected="false">Backend</a>
-                                        <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill"
-                                            href="#v-pills-messages" role="tab" aria-controls="v-pills-messages"
-                                            aria-selected="false">Movil</a>
-
+                                        <a *ngFor="let item of categories, let ix = index" class="nav-link"
+                                            [ngClass]="{'active': ix === 0}" id="v-pills-{{item}}-tab"
+                                            data-toggle="pill" href="#v-pills-{{item}}" role="tab"
+                                            aria-controls="v-pills-Backend" aria-selected="true"
+                                            (click)="selected = item">{{item}}</a>
                                     </div>
                                 </div>
                                 <div class="col-9">
-                                    <div class="tab-content" id="v-pills-tabContent">
-                                        <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
-                                            aria-labelledby="v-pills-home-tab">
+                                    <div *ngFor="let item of categories, let ix = index" class="tab-content"
+                                        id="v-pills-tabContent">
+
+                                        <div *ngIf="selected === item" class="tab-pane fade show active"
+                                            id="v-pills-{{item}}" role="tabpanel" aria-labelledby="v-pills-Backend-tab">
 
                                             <table class="table text-center">
                                                 <thead class="thead-dark">
@@ -111,156 +131,33 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-
-                                                        <td>CSS</td>
-                                                        <td>
-                                                            <a href="#" class="btn btn-warning  btn-sm ">Editar</a>
-                                                            <a href="#" class="btn btn-danger  btn-sm ml-1">Eliminar</a>
+                                                    <tr *ngFor="let technology of technologies">
+                                                        <td *ngIf="selected == technology.category">{{technology.name}}
+                                                        </td>
+                                                        <td *ngIf="selected == technology.category">
+                                                            <a class="btn btn-danger  btn-sm ml-1 text-light" (click)="deleteTechnology(technology._id)">Eliminar</a>
                                                         </td>
 
 
                                                     </tr>
-                                                    <tr>
-                                                        <td>CSS</td>
-                                                        <td>
-                                                            <a href="#" class="btn btn-warning  btn-sm ">Editar</a>
-                                                            <a href="#" class="btn btn-danger  btn-sm ml-1">Eliminar</a>
-                                                        </td>
+                                                    <tr></tr>
 
-                                                    </tr>
-                                                    <tr>
-
-                                                        <td>JSON</td>
-                                                        <td>50%</td>
-
-                                                    </tr>
-                                                    <tr>
-
-                                                        <td>JSON</td>
-                                                        <td>50%</td>
-
-                                                    </tr>
-                                                    <tr>
-
-                                                        <td>JSON</td>
-                                                        <td>50%</td>
-
-                                                    </tr>
                                                 </tbody>
                                             </table>
 
                                         </div>
-                                        <div class="tab-pane fade" id="v-pills-profile" role="tabpanel"
-                                            aria-labelledby="v-pills-profile-tab">
 
-                                            <table class="table text-center">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Tecnología</th>
-                                                        <th>Porcentaje</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-
-                                                        <td>CSS</td>
-                                                        <td>100%</td>
-
-
-                                                    </tr>
-                                                    <tr>
-                                                        <td>CSS</td>
-                                                        <td>80%</td>
-
-                                                    </tr>
-                                                    <tr>
-
-                                                        <td>JSON</td>
-                                                        <td>50%</td>
-
-                                                    </tr>
-                                                    <tr>
-
-                                                        <td>JSON</td>
-                                                        <td>50%</td>
-
-                                                    </tr>
-                                                    <tr>
-
-                                                        <td>JSON</td>
-                                                        <td>50%</td>
-
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-
-                                        </div>
-                                        <div class="tab-pane fade" id="v-pills-messages" role="tabpanel"
-                                            aria-labelledby="v-pills-messages-tab">
-                                            <table class="table text-center">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Tecnología</th>
-                                                        <th>Porcentaje</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-
-                                                        <td>CSS</td>
-                                                        <td>100%</td>
-
-
-                                                    </tr>
-                                                    <tr>
-                                                        <td>CSS</td>
-                                                        <td>80%</td>
-
-                                                    </tr>
-                                                    <tr>
-
-                                                        <td>JSON</td>
-                                                        <td>50%</td>
-
-                                                    </tr>
-                                                    <tr>
-
-                                                        <td>JSON</td>
-                                                        <td>50%</td>
-
-                                                    </tr>
-                                                    <tr>
-
-                                                        <td>JSON</td>
-                                                        <td>50%</td>
-
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-
-                                        </div>
 
                                     </div>
                                 </div>
                             </div>
 
-
-
-
                         </div>
                     </div>
                 </div>
 
-
-
             </div>
         </div>
-
-
-
-
-
 
     </div>
 

@@ -1,6 +1,6 @@
-export class Technology{
+export class Progress{
 
-    constructor(        
+    constructor(
         public _id:string,
         public name:string,
         public category:string

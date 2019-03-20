@@ -1,3 +1,5 @@
+import { Progress } from './progress';
+
 export class Person{
 
     constructor(
@@ -7,7 +9,7 @@ export class Person{
         public address:string,
         public telephone:string,
         public email:string,        
-        public skills:Array<any>
+        public skills:Array<Progress>
     ){}
     
 }

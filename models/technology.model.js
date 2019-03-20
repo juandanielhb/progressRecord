@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var schema = mongoose.Schema;
 
 var technologySchema = schema({
-    name:String,
+    name:{type: String, unique:true}, 
     category:String
 });
 
